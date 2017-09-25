@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="banner.css">
+</head>
+<body>
+	<div class="wrap" id="banner">
+		<ul>
+			<li><a href="#"><img src="img/banner1.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/banner2.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/banner3.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/banner4.jpg" alt=""></a></li>
+		</ul>
+		<span class="prev btn" id="prev"><</span>
+		<span class="next btn" id="next">></span>
+		<div class="bottom">
+			<div class="text">
+				<p>段落1</p>
+			</div>
+			<div class="dot" id="dot">
+				<span class="active"></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+	</div>
+	<script src="http://cdn.bootcss.com/jquery/1.10.1/jquery.min.js"></script>
+
+	<script>
+	$(function(){
+		var oDiv = $('#banner');
+		var aUlLi = oDiv.find('ul li');
+		var dot = $('#dot');
+		var btn = dot.find('span');
+		var arr = ['段落1', '段落2', '段落3', '段落4']
+		var oP = oDiv.find('p');
+		var iNow = 0;
+		var timer = null;
+		var prev = $('#prev');
+		var next = $('#next');
+
+
+
+
+		fnFade();
+		autoPlay();
+		prev.click(function(){
+			iNow --;
+			if(iNow < 0){
+				iNow = aUlLi.length - 1;
+			}
+			fnFade();
+		});
+		next.click(function(){
+			iNow ++;
+			if(iNow > aUlLi.length - 1){
+				iNow = 0;
+			}
+			fnFade();
+		});
+		btn.click(function(){
+			iNow = $(this).index();
+			fnFade();
+		});
+		oDiv.hover(function(){
+			clearInterval(timer);
+		}, autoPlay);
+		function autoPlay(){
+			timer = setInterval(function(){
+				iNow ++;
+				iNow %= aUlLi.length;
+				fnFade();
+			}, 3000);
+		}
+		function fnFade (){
+			aUlLi.each(function(i){
+				if( i != iNow ){
+					aUlLi.eq(i).fadeOut().css('z-index', 1);
+					btn.eq(i).removeClass('active');
+				}else{
+					aUlLi.eq(i).fadeIn().css('z-index', 2);
+					btn.eq(i).addClass('active');
+				}
+				oP.text(arr[iNow]);
+
+			});
+
+		}
+	});
+	</script>
+</body>
+</html>
